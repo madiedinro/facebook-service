@@ -1,0 +1,18 @@
+# set name of your service
+name: facebook
+
+# default paramenters
+env: {{ ENV }}
+listen: "{{ HOST|default('0.0.0.0')}}:{{PORT|default(8080) }}"
+redis_dsn: "{{ REDIS_DSN|default('redis://redis:6379') }}"
+ch_dsn: "{{ CHP_DSN|default('http://default:default@host:9090') }}"
+
+# this place for own params
+redirect: https://{{DOMAIN}}/facebook/redirect_back
+fb_app_key: {{FB_APP_ID}}
+fb_app_secret: {{FB_APP_SECRET}}
+fb_token: {{FB_TOKEN}}
+# endpount: https://api.endpoint.someservice.com/callme
+
+
+
