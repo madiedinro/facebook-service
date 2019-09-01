@@ -1,20 +1,14 @@
 
 
 import aiohttp
-from band import response, expose, logger, settings as cfg, rpc
+from band import response, expose, logger, settings as cfg
 from .helpers import msec, xxhasher
 from urllib.parse import urlencode
 from .main import client
-from .interract import id_get_redir_data
+from .interract import id_get_redir_data, id_update, id_lookup, id_phone_identify, id_phone_confirm, bot_chat_event
 
 
 xhash = xxhasher(cfg.xxseed)
-
-
-@expose.handler()
-async def auth(data, **params):
-    url = client.auth_link(state=data.get('token'))
-    return response.redirect(url)
 
 
 @expose.handler(timeout=5000)
@@ -39,14 +33,14 @@ async def account_linking(data, **params):
 
         if not code and raw_phone:
             # request confirmation
-            id_req = await rpc.request('id', 'phone_identify', phone=raw_phone, sid=sid)
+            id_req = await id_phone_identify(raw_phone, sid)
             logger.debug('id req', resp=id_req)
             if id_req and 'success' in id_req:
                 return {'phone_status': 1}
 
         if code:
             # confirm
-            id_req = await rpc.request('id', 'phone_confirm', sid=sid, code=code, save_match=False)
+            id_req = await id_phone_confirm(sid, code, False)
             logger.debug('id req', resp=id_req)
             # Success auth
             if id_req and 'success' in id_req:
@@ -57,6 +51,14 @@ async def account_linking(data, **params):
     return {}
 
 
+
+
+@expose.handler()
+async def auth(data, **params):
+    url = client.auth_link(state=data.get('token'))
+    return response.redirect(url)
+
+
 @expose.handler(timeout=10000)
 async def redirback(uid, data, **params):
     """
@@ -65,7 +67,6 @@ async def redirback(uid, data, **params):
     logger.debug('fb login', u=uid, d=data, p=params)
     code = data.get('code')
     redir_state = data.get('state')
-
 
     if not code:
         return response.error('Code is absent')
@@ -118,19 +119,24 @@ async def redirback(uid, data, **params):
     additional_ids = [uid_id_with_params, fb_id_with_params]
 
     # save fb-to-phone,tg
-    await rpc.request('id', 'update', service_id=fb_id, ids=source_sids_with_params)
+    await id_update(fb_id, source_sids_with_params)
     
     # save uid-to-fb-tg-phone
     uid_sids = [*source_sids_with_params, fb_id_with_params]
     logger.debug('uid sids', uid_id=uid_id, usids=uid_sids)
-    await rpc.request('id', 'update', service_id=uid_id, ids=uid_sids)
+    await id_update(uid_id, uid_sids)
+    
 
     # save phone-to-uid,fb
     if source_sids.get('phone'):
-        await rpc.request('id', 'update', service_id=source_sids['phone'], ids=additional_ids)
-        profile = await rpc.request('id', 'lookup', service_id=source_sids['phone'])
+        await id_update(source_sids['phone'], additional_ids)
+        profile = await id_lookup(source_sids['phone'])
         logger.debug('new profile', profile)
     
+                
+    if source_sids.get('tg'):
+        await bot_chat_event(sid_chat=source_sids['tg'], name='fblogin', data=me)
+
 
     return response.redirect(cfg.urls.alena_success.url)
 

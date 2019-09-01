@@ -1,23 +1,48 @@
 
-fb:
+fb_base: &fb_base
   redirect_uri: https://{{DOMAIN}}/facebook/redirback
   page_id: 1040392926136659
   app_id: 995966740602134
   app_secret: f1dbcf5c1a63c4836bf60acce72c629b
+
+fb:
+  <<: *fb_base
+  # Type App; 995966740602134, Digital God
   access_token: 995966740602134|mh133TzjpSqDj0XaQPlGnoJf6wc
-  app_page_token: EAAOJ05PIHRYBAKRJZAD7g98UUsYbgqWapsaKA2sNBR01C0IrZAvGmrq7MRgQrXkEn2ekw13kpVBQ0Q1FOvnlNV88tBnuj9e4aUyVIIxcZAi1rBRqS4tXQ8rgAQCrQBqZCCEr0heEh1ZA5mbgOdSBuhUkbgYLjIxdTybd1kZCxADwZDZD
+  # Type Page; App 995966740602134 Digital God; Page 1040392926136659 Digital God; User 10215638558831289 Dmitry Rodin (App Scoped)
+  # app_page_token: EAAOJ05PIHRYBAKRJZAD7g98UUsYbgqWapsaKA2sNBR01C0IrZAvGmrq7MRgQrXkEn2ekw13kpVBQ0Q1FOvnlNV88tBnuj9e4aUyVIIxcZAi1rBRqS4tXQ8rgAQCrQBqZCCEr0heEh1ZA5mbgOdSBuhUkbgYLjIxdTybd1kZCxADwZDZD
+  app_page_token: EAAOJ05PIHRYBAHq9Kbl99ZCInvQdd7FDNKLsn44m6ccf5J1CdOGBep6ZCZAmWCAfZBA1ZAIj8QKXkZBZBOdtKhEmt9ZBP8xUVsZAgcCZBIH6ZAOUfJzfX44ZB8oPvNjRMTNVJ9xO5bRh5W6cqisMURPe4yS6Nz5wbxqpnFjvtPk4BSULTe3pzWcdcBmzB4Ft0mexZAXYZD
+  # Type Page; App 995966740602134 Digital God; Page 1040392926136659 Digital God; User 128397994991231 inspector (App Scoped)
   app_page_inspector: EAAOJ05PIHRYBAKlOT0ZBBM0VFPz1lqAG0ZCVtvpKiggLpKwFH6yulPNretDY1CBwTdW8JMZC5DR5H53lf4n3cQEOzxN52UCjjkYwe5Sqp9JLY14gC7wLZAXZB5dDCUk3vD6Puh0HQwZBPybobznsAUIsFtSrSnXpJTApACmB0KSmqfrm42EZC0HyxjB0BgU17aQXBxjoLHYtV6QSL2sqsnB
 
-fbapp:
+fb_app:
+  <<: *fb_base
+  # App token (see above)
   access_token: 995966740602134|mh133TzjpSqDj0XaQPlGnoJf6wc
 
-fbdg:
+fb_page:
+  <<: *fb_base
+  # Inspector Page token (see above)
   access_token: EAAOJ05PIHRYBAKlOT0ZBBM0VFPz1lqAG0ZCVtvpKiggLpKwFH6yulPNretDY1CBwTdW8JMZC5DR5H53lf4n3cQEOzxN52UCjjkYwe5Sqp9JLY14gC7wLZAXZB5dDCUk3vD6Puh0HQwZBPybobznsAUIsFtSrSnXpJTApACmB0KSmqfrm42EZC0HyxjB0BgU17aQXBxjoLHYtV6QSL2sqsnB
-
 
 urls:
   alena_success: { url: "https://{{DOMAIN}}/alena/auth_success" }
   alena_too_late: { url: "https://{{DOMAIN}}/alena/too_late" }
+
+
+apps:
+  dg:
+    personas:
+      - name: Alena Mayer
+        profile_picture_url: http://bolt.rstat.org/public/images/bot-rounded.png
+    persistent_menu:
+      locale: default
+      composer_input_disabled: true
+      call_to_actions: 
+        - title: 
+
+
+
 
 
 xxseed: 99991025

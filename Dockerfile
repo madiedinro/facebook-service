@@ -1,5 +1,5 @@
-FROM {band-base-py-image}
-WORKDIR /usr/src/services
+ARG BASE_CONTAINER=rockstat/band-base-py:3.7
+FROM $BASE_CONTAINER
 
 LABEL band.service.version="0.1.1"
 LABEL band.service.title="Facebook"

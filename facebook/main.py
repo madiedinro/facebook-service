@@ -10,7 +10,8 @@ from band import expose, cleanup, worker, settings as cfg, logger, response, sch
 from .interract import digitalgod_get_user
 from .client import FBClient
 
-client = FBClient(**cfg.fb)
+client = FBClient(**cfg.fb_app)
+client_page = FBClient(**cfg.fb_page)
 
 class state:
     events = 0
@@ -34,10 +35,15 @@ async def do_query(url, params, json=None):
             else:
                 logger.error('wrong response', rd=resp_data, code=resp.status)
 
+# https://developers.facebook.com/docs/messenger-platform/introduction/conversation-components
+
 profiles = {}
 
 @expose()
 async def mp_get_profile(recipient):
+    """
+    Messenger Platform get Profile
+    """
     cahed_id = str(recipient)
     cached_profile = profiles.get(cahed_id)
     if cached_profile:
@@ -56,6 +62,9 @@ async def mp_get_profile(recipient):
 
 @expose()
 async def mp_message(recipient, message):
+    """
+    Send Messenger Platform message
+    """
     request_body = {
         "recipient": {
             "id":  recipient
@@ -73,6 +82,9 @@ async def mp_message(recipient, message):
 
 @expose()
 async def create_persona():
+    """
+    Messenger Platform create Persona
+    """
     request_body = {
         'name': "Alena Mayer",
         'profile_picture_url': "http://bolt.rstat.org/public/images/bot-rounded.png"
@@ -87,10 +99,106 @@ async def create_persona():
 
 @expose()
 async def personas():
+    """
+    Messenger Platform get Personas
+    """
     url = 'https://graph.facebook.com/me/personas'
     qs = {
         'access_token': cfg.fb.app_page_token
     }
+    return await do_query(url, qs)
+
+
+@expose()
+async def mp_set_get_started():
+    """
+    Messenger Platform set "get_started" button
+    """
+    url = 'https://graph.facebook.com/v2.6/me/messenger_profile'
+    qs = {
+        'access_token': cfg.fb_page.access_token
+    }
+    json = {
+        'get_started': {
+            'payload': 'start'
+        }
+    }
+    return await do_query(url, qs)
+
+
+
+@expose()
+async def mp_set_greeting():
+    """
+    Messenger Platform set "get_started" button
+    """
+    url = 'https://graph.facebook.com/v2.6/me/messenger_profile'
+    qs = {
+        'access_token': cfg.fb_page.access_token
+    }
+    json = {
+        'greeting': [
+            {
+                "locale":"default",
+                "text":"Hello!" 
+            }, {
+                "locale":"ru_RU",
+                "text":"Привет ! Я "
+            }
+        ]
+    }
+    return await do_query(url, qs)
+
+
+@expose()
+async def mp_set_menu():
+    """
+    Messenger Platform set persistent menu
+    """
+    url = 'https://graph.facebook.com/v2.6/me/messenger_profile'
+    qs = {
+        'access_token': cfg.fb_page.access_token
+    }
+
+    
+    json = {
+        "persistent_menu":[
+        {
+            "locale":"default",
+            "composer_input_disabled": true,
+            "call_to_actions":[
+                {
+                "title":"My Account",
+                "type":"nested",
+                "call_to_actions":[
+                    {
+                    "title":"Pay Bill",
+                    "type":"postback",
+                    "payload":"PAYBILL_PAYLOAD"
+                    },
+                    {
+                    "title":"History",
+                    "type":"postback",
+                    "payload":"HISTORY_PAYLOAD"
+                    },
+                    {
+                    "title":"Contact Info",
+                    "type":"postback",
+                    "payload":"CONTACT_INFO_PAYLOAD"
+                    }
+                ]
+                },
+                # {
+                #     "type":"web_url",
+                #     "title":"Latest News",
+                #     "url":"http://www.messenger.com/",
+                #     "webview_height_ratio":"full"
+                # }
+            ]
+        }
+        ]
+    }
+        
     return await do_query(url, qs)
 
 

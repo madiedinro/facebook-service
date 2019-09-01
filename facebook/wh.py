@@ -68,14 +68,14 @@ handlers = {'mention': wh_handle_mention}
 
 async def wh_handler(data):
     if data.get('object') == 'page':
-        for e in data.get('entry') or []:
-            for c in e.get('changes'):
+        for e in data.get('entry', []):
+            for c in e.get('changes', []):
                 field = c.pop('field', None)
                 value = c.pop('value', {})
                 handler = handlers.get(field)
                 if handler:
                     await handler(value)
-            for m in e.get('messaging') or []:
+            for m in e.get('messaging', []):
                 logger.debug('messaging -> item', m=m)
                 # {'recipient': {'id': '1040392926136659'}, 'timestamp': 1554966532345, 'sender': {'id': '1921281307989859'}, 'account_linking': {'authorization_code': 'ab3936a2662e5c6a', 'status': 'linked'}}
                 sender_id = m.get('sender', {}).get('id')
@@ -95,4 +95,4 @@ async def wh(data, **params):
         logger.warn('props', hvt, chl)
         return response.data(chl)
     await scheduler.spawn(wh_handler(data))
-    return 'EVENT_RECEIVED'
+    return {}

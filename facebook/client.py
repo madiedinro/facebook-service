@@ -54,7 +54,7 @@ class FBClient():
             async with session.get(url, params=params) as response:
                 if response.status == 200:
                     return await response.json()
-                logger.error('fblogin error', status=response.status, text=(await response.text()))
+                logger.error('fbgraph_query error', status=response.status, text=(await response.text()))
 
     async def exchange_code(self, code):
         """
