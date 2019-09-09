@@ -18,7 +18,7 @@ class state:
 
 
 @worker()
-async def worker():
+async def worker_work():
     for i in count():
         await asyncio.sleep(60*5)
         logger.debug('fb status', i=i, e=state.events)
@@ -165,7 +165,7 @@ async def mp_set_menu():
         "persistent_menu":[
         {
             "locale":"default",
-            "composer_input_disabled": true,
+            "composer_input_disabled": True,
             "call_to_actions":[
                 {
                 "title":"My Account",

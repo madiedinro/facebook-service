@@ -23,7 +23,7 @@ fb_app:
 fb_page:
   <<: *fb_base
   # Inspector Page token (see above)
-  access_token: EAAOJ05PIHRYBAKlOT0ZBBM0VFPz1lqAG0ZCVtvpKiggLpKwFH6yulPNretDY1CBwTdW8JMZC5DR5H53lf4n3cQEOzxN52UCjjkYwe5Sqp9JLY14gC7wLZAXZB5dDCUk3vD6Puh0HQwZBPybobznsAUIsFtSrSnXpJTApACmB0KSmqfrm42EZC0HyxjB0BgU17aQXBxjoLHYtV6QSL2sqsnB
+  access_token: EAAOJ05PIHRYBAHq9Kbl99ZCInvQdd7FDNKLsn44m6ccf5J1CdOGBep6ZCZAmWCAfZBA1ZAIj8QKXkZBZBOdtKhEmt9ZBP8xUVsZAgcCZBIH6ZAOUfJzfX44ZB8oPvNjRMTNVJ9xO5bRh5W6cqisMURPe4yS6Nz5wbxqpnFjvtPk4BSULTe3pzWcdcBmzB4Ft0mexZAXYZD
 
 urls:
   alena_success: { url: "https://{{DOMAIN}}/alena/auth_success" }

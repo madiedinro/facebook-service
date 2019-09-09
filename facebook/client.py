@@ -4,6 +4,7 @@ from band import logger
 
 
 API_3_2 = 'v3.2/'
+API_3_3 = 'v3.3/'
 
 
 class FBClient():
@@ -33,7 +34,7 @@ class FBClient():
         logger.debug('fb_redir', url=self.redirect_uri)
         return login_url
 
-    async def fbgraph_query(self, resource, extra_params={}, credentials=None, version_segment='v3.2/'):
+    async def fbgraph_query(self, resource, extra_params={}, credentials=None, version_segment=API_3_3):
 
         """
         graph.facebook.com/debug_token?
@@ -51,6 +52,7 @@ class FBClient():
 
         async with aiohttp.ClientSession() as session:
             url = f'https://graph.facebook.com/{version_segment}' + resource
+            logger.debug(f'quering {url}', params=params)
             async with session.get(url, params=params) as response:
                 if response.status == 200:
                     return await response.json()

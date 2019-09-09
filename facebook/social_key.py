@@ -12,7 +12,4 @@ def get_post(id) -> Coroutine:
 
 @expose()
 def get_profile(id) -> Coroutine:
-    params = {
-        'fields': 'child_attachments,created_time,description,from,full_picture,link,message,name,to'
-    }
     return client_page.fbgraph_query(f'/{id}')
